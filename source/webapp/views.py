@@ -1,8 +1,9 @@
-from django.views.generic import DetailView, CreateView, UpdateView, View, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, View, DeleteView, FormView
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from webapp.models import Food, Order, OrderFood
 from webapp.forms import FoodForm, OrderForm, OrderFoodForm
+from django.shortcuts import get_object_or_404
 
 
 class FoodDetailView(DetailView):
@@ -19,9 +20,37 @@ class FoodCreateView(CreateView):
         return reverse('food_detail', kwargs={'pk': self.object.pk})
 
 
-class OrderDetailView(DetailView):
+class OrderDetailView(DetailView, FormView):
     model = Order
     template_name = 'order_detail.html'
+    form_class = OrderFoodForm
+
+
+class OrderFoodAjaxCreateView(CreateView):
+    model = OrderFood
+    form_class = OrderFoodForm
+
+    # обработка формы без ошибок
+    def form_valid(self, form):
+        order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+        form.instance.order = order
+        order_food = form.save()
+        return JsonResponse({
+            'food_name': order_food.food.name,
+            'amount': order_food.amount,
+            'order_pk': order_food.order.pk,
+            'pk': order_food.pk
+        })
+
+    # обработка формы с ошибками
+    # статус 422 - UnprocessableEntity, применяется,
+    # когда запрос имеет корректный формат,
+    # но неподходящие по смыслу данные (например, пустые).
+    def form_invalid(self, form):
+        return JsonResponse({
+            'errors': form.errors
+        }, status='422')
+
 
 
 class OrderUpdateView(UpdateView):

@@ -1,10 +1,131 @@
 {% extends 'base.html' %}
 {% block title %}Заказ{% endblock %}
 {% block content %}
-    {{ order.contact_phone }}
-    {% for order_food in order.foods.all %}
-        {{ order_food.food.name }}
-    {% endfor %}
+    <h1>Заказ #{{ order.pk }}</h1>
+    <p>Контактные данные: {{ order.contact_phone }} - {{ order.contact_name }}</p>
+    <p>Адрес доставки: {{ order.delivery_address|default_if_none:"Не указан" }}</p>
+    <h2>Блюда: </h2>
+    <p>(<a href="#" data-toggle="modal" data-target="#food_edit_modal">Добавить</a>)</p>
+    <ul id="order_food_list">
+        {% for order_food in order.foods.all %}
+            <li>{{ order_food.food.name }}: {{ order_food.amount }}шт. (<a href="#">Изменить</a>/<a href="#">Удалить</a>)
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="modal" tabindex="-1" role="dialog" id="food_edit_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавить блюда</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="food_form" action="{% url 'order_food_create' order.pk %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="food_submit">Добавить</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="application/javascript">
+        // url, котрый используется в href сгенерированных ссылок.
+        // вы можете использовать теги Django внутри скриптов,
+        // поэтому можно сгенерировать url заранее
+        // и в дальнейшем использовать его в скрипте
+
+        // в дз такую ссылку делать не нужно, т.к. ссылки "Изменить" и "Удалить"
+        // также будут обрабатываться JS и не будут выполнять своей прямой функции
+        // (перехода по адресу, указанному в href).
+        // ссылка приведена для примера создания переменных JS с данными Django.
+
+        {# const orderFoodUpdateURL = "{% url 'order_food_update' order.pk %}"; #}
+
+        // функция, которая обрабатывает успешный AJAX-запрос
+        function addOrderFoodSuccess(response, status) {
+            // выводим содержимое ответа и статус в консоль.
+            console.log(response);
+            console.log(status);
+
+            // создаём новый пункт списка блюд
+            let newFoodLi = document.createElement('li');
+
+            // заполняем новый пункт списка блюд разметкой - текстом и ссылками
+            // т.к. ответ - это JSON-объект,
+            // то с ним можно работать, как с объектом JS,
+            // и обращаться к его свойствам через точку.
+            // используем форматированную строку,
+            // которая обозначается апострофами (``)
+            // и позволяет подставлять в неё переменные через ${}.
+            $(newFoodLi).html(
+                `${response.food_name}: ${response.amount}шт. (<a href="#">Изменить</a>/<a href="#">Удалить</a>)`
+            );
+
+            // добавляем новый пункт в список
+            $('#order_food_list').append(newFoodLi);
+
+            // выключаем модальное окно
+            $('#food_edit_modal').modal('toggle');
+        }
+
+        // функция, которая обрабатывает неуспешный AJAX-запрос
+        function submitOrderFoodError(response, status) {
+            // выводим содержимое ответа и статус в консоль.
+            console.log(response);
+            console.log(status);
+        }
+
+        // функция, которая отправляет AJAX-запрос с формой
+        // по клику на кнопку "Добавить"
+        function addOrderFood() {
+            // определяем url для отправки формы food_form по её свойству action:
+            let url = $('#food_form').attr('action');
+
+            // собираем данные, указанные в форме food_form
+            let data = {
+                food: $('#id_food').val(),
+                amount: $('#id_amount').val(),
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+            };
+
+            // отправляем данные
+            // опции success и error должны быть функциями,
+            // которые jQuery вызовет при успешной и неуспешной отправке запроса, соответственно
+            // (т.н. "колбэки" - "callback" - функции обратной связи).
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: data,
+                success: addOrderFoodSuccess,
+                error: submitOrderFoodError
+            });
+        }
+
+        // назначаем действие на нажатие кнопки "Добавить" в модалке.
+        $('#food_submit').on('click', function(e) {
+            // отправляем форму
+            $('#food_form').submit();
+        });
+
+        // назначаем действие на отправку формы food_form.
+        $('#food_form').on('submit', function(e) {
+            // отменить обычную отправку формы (действие по умолчанию с перезагрузкой страницы)
+            e.preventDefault();
+            // отправить форму с помощью функции addOrderFood, которая использует AJAX-запрос.
+            addOrderFood();
+        });
+    </script>
+
 {% endblock %}
 
 {# Откройте /order/<pk>, чтобы посмотреть список блюд для заказа на этой странице #}

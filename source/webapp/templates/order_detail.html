@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% load template_tag_examples %}
+{% load staticfiles %}
+
+{# Откройте /order/<pk>, чтобы посмотреть список блюд для заказа на этой странице #}
+
 {% block title %}Заказ{% endblock %}
 {% block content %}
     <h1>Заказ #{{ order.pk }}</h1>
@@ -12,12 +16,32 @@
         Заказ не может быть доставлен
     {% endif %}</p>
     <h2>Блюда: </h2>
-    <p>(<a href="#" data-toggle="modal" data-target="#food_edit_modal">Добавить</a>)</p>
+    <p>(<a href="{% url 'order_food_create' order.pk %}" data-toggle="modal" data-target="#food_edit_modal">Добавить</a>)</p>
     <ul id="order_food_list">
         {% for order_food in order|get_foods %}
-            <li>{{ order_food.food.name|cut:'d'|upper }}: {{ order_food.amount|increment }}шт. (<a href="#">Изменить</a>/<a
-                    href="#">Удалить</a>)
-                <p>{% show_food_form order_food.pk %}</p>
+            {# пример шаблонных фильтров Django #}
+            {# раскомментируйте этот блок и закомментируйте следующий, #}
+            {# чтобы посмотреть на работу фильтра increment, #}
+            {# последовательное применение фильтров cut и upper #}
+            {# и работу тега show_food_form #}
+            {# <li>{{ order_food.food.name|cut:'d'|upper }}: {{ order_food.amount|increment }} шт. #}
+            {#     (<a href="#">Изменить</a> / #}
+            {#     <a href="#">Удалить</a>) #}
+            {#     <p>{% show_food_form order_food.pk %}</p> #}
+            {# </li>#}
+
+            {# используем data-атрибут для хранения pk объекта food, #}
+            {# который нужен для заполнения формы. #}
+            {# используем order_food.pk, как часть id пункта li #}
+            {# и указываем его в data-атрибуте ссылки на редактирование #}
+            {# для связи этой ссылки и блока с данными одного и того же объека order_food. #}
+            {# для внутренних элементов вместо id задаём классы, т.к. #}
+            {# id на странице не должны повторяться, а классы могут. #}
+            <li id="order_food_{{ order_food.pk }}">
+                <span class="food_name" data-food_pk="{{ order_food.food.pk }}">{{ order_food.food.name }}</span>:
+                <span class="food_amount">{{ order_food.amount }}</span> шт.
+                (<a class="edit_link" href="{% url 'order_food_update' order_food.pk %}" data-pk="{{ order_food.pk }}">Изменить</a> /
+                <a href="#">Удалить</a>)
             </li>
         {% endfor %}
     </ul>
@@ -47,94 +71,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script type="application/javascript">
-        // url, котрый используется в href сгенерированных ссылок.
-        // вы можете использовать теги Django внутри скриптов,
-        // поэтому можно сгенерировать url заранее
-        // и в дальнейшем использовать его в скрипте
-
-        // в дз такую ссылку делать не нужно, т.к. ссылки "Изменить" и "Удалить"
-        // также будут обрабатываться JS и не будут выполнять своей прямой функции
-        // (перехода по адресу, указанному в href).
-        // ссылка приведена для примера создания переменных JS с данными Django.
-
-        {# const orderFoodUpdateURL = "{% url 'order_food_update' order.pk %}"; #}
-
-        // функция, которая обрабатывает успешный AJAX-запрос
-        function addOrderFoodSuccess(response, status) {
-            // выводим содержимое ответа и статус в консоль.
-            console.log(response);
-            console.log(status);
-
-            // создаём новый пункт списка блюд
-            let newFoodLi = document.createElement('li');
-
-            // заполняем новый пункт списка блюд разметкой - текстом и ссылками
-            // т.к. ответ - это JSON-объект,
-            // то с ним можно работать, как с объектом JS,
-            // и обращаться к его свойствам через точку.
-            // используем форматированную строку,
-            // которая обозначается апострофами (``)
-            // и позволяет подставлять в неё переменные через ${}.
-            $(newFoodLi).html(
-                `${response.food_name}: ${response.amount}шт. (<a href="#">Изменить</a>/<a href="#">Удалить</a>)`
-            );
-
-            // добавляем новый пункт в список
-            $('#order_food_list').append(newFoodLi);
-
-            // выключаем модальное окно
-            $('#food_edit_modal').modal('toggle');
-        }
-
-        // функция, которая обрабатывает неуспешный AJAX-запрос
-        function submitOrderFoodError(response, status) {
-            // выводим содержимое ответа и статус в консоль.
-            console.log(response);
-            console.log(status);
-        }
-
-        // функция, которая отправляет AJAX-запрос с формой
-        // по клику на кнопку "Добавить"
-        function addOrderFood() {
-            // определяем url для отправки формы food_form по её свойству action:
-            let url = $('#food_form').attr('action');
-
-            // собираем данные, указанные в форме food_form
-            let data = {
-                food: $('#id_food').val(),
-                amount: $('#id_amount').val(),
-                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
-            };
-
-            // отправляем данные
-            // опции success и error должны быть функциями,
-            // которые jQuery вызовет при успешной и неуспешной отправке запроса, соответственно
-            // (т.н. "колбэки" - "callback" - функции обратной связи).
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: data,
-                success: addOrderFoodSuccess,
-                error: submitOrderFoodError
-            });
-        }
-
-        // назначаем действие на нажатие кнопки "Добавить" в модалке.
-        $('#food_submit').on('click', function (e) {
-            // отправляем форму
-            $('#food_form').submit();
-        });
-
-        // назначаем действие на отправку формы food_form.
-        $('#food_form').on('submit', function (e) {
-            // отменить обычную отправку формы (действие по умолчанию с перезагрузкой страницы)
-            e.preventDefault();
-            // отправить форму с помощью функции addOrderFood, которая использует AJAX-запрос.
-            addOrderFood();
-        });
-    </script>
-
+    {# весь код переехал в static/js/main.js #}
+    <script type="application/javascript" src="{% static 'js/main.js' %}"></script>
 {% endblock %}
-
-{# Откройте /order/<pk>, чтобы посмотреть список блюд для заказа на этой странице #}

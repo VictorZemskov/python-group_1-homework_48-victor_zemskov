@@ -81,6 +81,12 @@ class OrderFoodAjaxCreateView(CreateView):
         }, status='422')
 
 
+class OrderFoodAjaxUpdateView(UpdateView):
+    # напишите здесь код по обработке изменения
+    # блюда в заказе аналогично коду по добавлению блюда.
+    pass
+
+
 class OrderUpdateView(UpdateView):
     model = Order
     template_name = 'order_update.html'

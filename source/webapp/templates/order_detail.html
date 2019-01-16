@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
+{% load template_tag_examples %}
 {% block title %}Заказ{% endblock %}
 {% block content %}
     <h1>Заказ #{{ order.pk }}</h1>
-    <p>Контактные данные: {{ order.contact_phone }} - {{ order.contact_name }}</p>
+    <p>Сегодня - {% current_time "%d.%m.%Y %H:%M" %}</p>
+    <p>Контактные данные: {{ order.contact_phone }} - {{ order.contact_name|upper }}</p>
     <p>Адрес доставки: {{ order.delivery_address|default_if_none:"Не указан" }}</p>
+    <p>{% if order|can_be_delivered_by:request.user %}
+        Заказ может быть доставлен
+    {% else %}
+        Заказ не может быть доставлен
+    {% endif %}</p>
     <h2>Блюда: </h2>
     <p>(<a href="#" data-toggle="modal" data-target="#food_edit_modal">Добавить</a>)</p>
     <ul id="order_food_list">
-        {% for order_food in order.foods.all %}
-            <li>{{ order_food.food.name }}: {{ order_food.amount }}шт. (<a href="#">Изменить</a>/<a href="#">Удалить</a>)
+        {% for order_food in order|get_foods %}
+            <li>{{ order_food.food.name|cut:'d'|upper }}: {{ order_food.amount|increment }}шт. (<a href="#">Изменить</a>/<a
+                    href="#">Удалить</a>)
+                <p>{% show_food_form order_food.pk %}</p>
             </li>
         {% endfor %}
     </ul>
@@ -112,13 +121,13 @@
         }
 
         // назначаем действие на нажатие кнопки "Добавить" в модалке.
-        $('#food_submit').on('click', function(e) {
+        $('#food_submit').on('click', function (e) {
             // отправляем форму
             $('#food_form').submit();
         });
 
         // назначаем действие на отправку формы food_form.
-        $('#food_form').on('submit', function(e) {
+        $('#food_form').on('submit', function (e) {
             // отменить обычную отправку формы (действие по умолчанию с перезагрузкой страницы)
             e.preventDefault();
             // отправить форму с помощью функции addOrderFood, которая использует AJAX-запрос.

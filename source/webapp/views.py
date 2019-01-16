@@ -20,6 +20,35 @@ class FoodCreateView(CreateView):
         return reverse('food_detail', kwargs={'pk': self.object.pk})
 
 
+class FoodDetailSessionView(DetailView):
+    model = Food
+    template_name = 'food_detail.html'
+
+    def get_object(self, queryset=None):
+        # достаём из сессии значение для ключа food_pk
+        food_pk = self.request.session.get('food_pk')
+        food = get_object_or_404(self.model, pk=food_pk)
+        # удаляем из сессии значение для ключа food_pk
+        self.request.session.pop('food_pk')
+        return food
+
+
+class FoodCreateSessionView(CreateView):
+    model = Food
+    template_name = 'food_session_create.html'
+    form_class = FoodForm
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # сохраняем ключ только что созданного объекта Food
+        # в сессию с ключом food_pk
+        self.request.session['food_pk'] = self.object.pk
+        return response
+
+    def get_success_url(self):
+        return reverse('food_session_detail')
+
+
 class OrderDetailView(DetailView, FormView):
     model = Order
     template_name = 'order_detail.html'
@@ -50,7 +79,6 @@ class OrderFoodAjaxCreateView(CreateView):
         return JsonResponse({
             'errors': form.errors
         }, status='422')
-
 
 
 class OrderUpdateView(UpdateView):

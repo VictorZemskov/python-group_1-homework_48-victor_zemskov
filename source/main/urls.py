@@ -20,7 +20,8 @@ from django.conf import settings
 
 from webapp.views import FoodDetailView, OrderDetailView, \
     OrderCreateView, FoodCreateView, OrderUpdateView, \
-    OrderFoodCreateView, OrderFoodAjaxCreateView
+    OrderFoodCreateView, OrderFoodAjaxCreateView, \
+    FoodCreateSessionView, FoodDetailSessionView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,9 @@ urlpatterns = [
     path('order/create', OrderCreateView.as_view(), name='order_create'),
     path('order/<int:pk>/update', OrderUpdateView.as_view(), name='order_update'),
     path('order/<int:pk>/food/create', OrderFoodAjaxCreateView.as_view(), name='order_food_create'),
+
+    path('food/session-create', FoodCreateSessionView.as_view(), name='food_session_create'),
+    path('food/session-detail', FoodDetailSessionView.as_view(), name='food_session_detail'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

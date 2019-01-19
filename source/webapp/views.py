@@ -66,9 +66,10 @@ class OrderFoodAjaxCreateView(CreateView):
         order_food = form.save()
         return JsonResponse({
             'food_name': order_food.food.name,
+            'food_pk': order_food.food.pk,
             'amount': order_food.amount,
-            'order_pk': order_food.order.pk,
-            'pk': order_food.pk
+            'pk': order_food.pk,
+            'edit_url': reverse('order_food_update', kwargs={'pk': order_food.pk})
         })
 
     # обработка формы с ошибками
@@ -82,9 +83,22 @@ class OrderFoodAjaxCreateView(CreateView):
 
 
 class OrderFoodAjaxUpdateView(UpdateView):
-    # напишите здесь код по обработке изменения
-    # блюда в заказе аналогично коду по добавлению блюда.
-    pass
+    model = OrderFood
+    form_class = OrderFoodForm
+
+    def form_valid(self, form):
+        order_food = form.save()
+        return JsonResponse({
+            'food_name': order_food.food.name,
+            'food_pk': order_food.food.pk,
+            'amount': order_food.amount,
+            'pk': order_food.pk
+        })
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            'errors': form.errors
+        }, status='422')
 
 
 class OrderUpdateView(UpdateView):

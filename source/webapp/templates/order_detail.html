@@ -16,7 +16,7 @@
         Заказ не может быть доставлен
     {% endif %}</p>
     <h2>Блюда: </h2>
-    <p>(<a href="{% url 'order_food_create' order.pk %}" data-toggle="modal" data-target="#food_edit_modal">Добавить</a>)</p>
+    <p>(<a href="{% url 'order_food_create' order.pk %}" id="order_food_add_link">Добавить</a>)</p>
     <ul id="order_food_list">
         {% for order_food in order|get_foods %}
             {# пример шаблонных фильтров Django #}
@@ -38,8 +38,8 @@
             {# для внутренних элементов вместо id задаём классы, т.к. #}
             {# id на странице не должны повторяться, а классы могут. #}
             <li id="order_food_{{ order_food.pk }}">
-                <span class="food_name" data-food_pk="{{ order_food.food.pk }}">{{ order_food.food.name }}</span>:
-                <span class="food_amount">{{ order_food.amount }}</span> шт.
+                <span id="order_food_name_{{ order_food.pk }}" data-food_pk="{{ order_food.food.pk }}">{{ order_food.food.name }}</span>:
+                <span id="order_food_amount_{{ order_food.pk }}">{{ order_food.amount }}</span> шт.
                 (<a class="edit_link" href="{% url 'order_food_update' order_food.pk %}" data-pk="{{ order_food.pk }}">Изменить</a> /
                 <a href="#">Удалить</a>)
             </li>
@@ -57,6 +57,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="food_form" action="{% url 'order_food_create' order.pk %}" method="POST">
+                        <div class="text-danger" id="food_form_errors"></div>
                         {% csrf_token %}
                         {{ form.as_p }}
                     </form>

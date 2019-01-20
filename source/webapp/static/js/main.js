@@ -109,13 +109,13 @@ function onCreateSuccess(response, status) {
     newFoodLi
         .attr('id', 'order_food_' + response.pk)
         .append(foodNameSpan)
-        .append(document.createTextNode(': '))
+        .append(': ')
         .append(foodAmountSpan)
-        .append(document.createTextNode(' шт. ('))
+        .append(' шт. (')
         .append(editLink)
-        .append(document.createTextNode(' / '))
+        .append(' / ')
         .append(deleteLink)
-        .append(document.createTextNode(')'));
+        .append(')');
 
     // добавляем новый пункт в список
     $('#order_food_list').append(newFoodLi);

@@ -1,0 +1,375 @@
+[
+{
+  "model": "webapp.food",
+  "pk": 1,
+  "fields": {
+    "name": "\u041f\u0438\u0446\u0446\u0430",
+    "description": "\u041f\u0438\u0446\u0446\u0430",
+    "photo": "django_architecture_zMPIyfp.png",
+    "price": "400.00"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 2,
+  "fields": {
+    "name": "\u0442\u0435\u0441\u0442",
+    "description": "\u0442\u0435\u0441\u04421",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_001.png",
+    "price": "1.00"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 3,
+  "fields": {
+    "name": "asdasd",
+    "description": "afsdg",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_002.png",
+    "price": "3.00"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 4,
+  "fields": {
+    "name": ";fkhjfd",
+    "description": "skhgi",
+    "photo": "\u0421\u043d\u0438\u043c\u043e\u043a_\u044d\u043a\u0440\u0430\u043d\u0430_\u043e\u0442_2018-12-06_12-47-03.png",
+    "price": "123214.00"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 5,
+  "fields": {
+    "name": "\u0411\u043b\u044e\u0434\u043e",
+    "description": "\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_001_gFcedBM.png",
+    "price": "43.50"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 6,
+  "fields": {
+    "name": "\u0421\u0435\u0441\u0441\u0438\u044f",
+    "description": "\u041e\u0447\u0435\u043d\u044c \u0432\u043a\u0443\u0441\u043d\u043e.",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_018.png",
+    "price": "25.50"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 7,
+  "fields": {
+    "name": "213123",
+    "description": "test",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_017.png",
+    "price": "12.12"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 8,
+  "fields": {
+    "name": "asd",
+    "description": "asdasd",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_010.png",
+    "price": "12345.00"
+  }
+},
+{
+  "model": "webapp.food",
+  "pk": 9,
+  "fields": {
+    "name": "\u0421\u0435\u0441\u0441\u0438\u044f 2",
+    "description": "\u0415\u0449\u0451 \u0440\u0430\u0437",
+    "photo": "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435_014.png",
+    "price": "789456.00"
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 2,
+  "fields": {
+    "order": 1,
+    "food": 2,
+    "amount": 13
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 3,
+  "fields": {
+    "order": 1,
+    "food": 2,
+    "amount": 13
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 4,
+  "fields": {
+    "order": 1,
+    "food": 3,
+    "amount": 123
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 5,
+  "fields": {
+    "order": 1,
+    "food": 3,
+    "amount": 654
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 6,
+  "fields": {
+    "order": 1,
+    "food": 5,
+    "amount": 5
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 7,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 5
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 8,
+  "fields": {
+    "order": 1,
+    "food": 6,
+    "amount": 100
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 9,
+  "fields": {
+    "order": 1,
+    "food": 3,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 10,
+  "fields": {
+    "order": 1,
+    "food": 2,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 11,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 5
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 12,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 13,
+  "fields": {
+    "order": 1,
+    "food": 2,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 14,
+  "fields": {
+    "order": 1,
+    "food": 6,
+    "amount": 10
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 15,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 16,
+  "fields": {
+    "order": 1,
+    "food": 1,
+    "amount": 879
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 17,
+  "fields": {
+    "order": 1,
+    "food": 6,
+    "amount": 123
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 18,
+  "fields": {
+    "order": 1,
+    "food": 9,
+    "amount": 46
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 19,
+  "fields": {
+    "order": 1,
+    "food": 5,
+    "amount": 6092
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 20,
+  "fields": {
+    "order": 1,
+    "food": 3,
+    "amount": 14
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 21,
+  "fields": {
+    "order": 1,
+    "food": 8,
+    "amount": 1
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 22,
+  "fields": {
+    "order": 1,
+    "food": 7,
+    "amount": 345
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 23,
+  "fields": {
+    "order": 1,
+    "food": 8,
+    "amount": 12
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 24,
+  "fields": {
+    "order": 1,
+    "food": 8,
+    "amount": 15
+  }
+},
+{
+  "model": "webapp.orderfood",
+  "pk": 25,
+  "fields": {
+    "order": 1,
+    "food": 2,
+    "amount": 12
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$120000$J8WgVgVGzo7A$NkPTJmCFxWP381oVUeC0HLVWhWnhA2LiFvm96ugPe1Y=",
+    "last_login": "2019-01-16T14:17:20.657Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "\u0410\u0434\u043c\u0438\u043d",
+    "last_name": "\u0410\u0434\u043c\u0438\u043d\u044b\u0447",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-12-20T14:21:16Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "webapp.order",
+  "pk": 1,
+  "fields": {
+    "contact_phone": "123456789",
+    "contact_name": "\u0410\u0434\u043c\u0438\u043d 2",
+    "delivery_address": null,
+    "status": "on_way",
+    "operator": null,
+    "courier": [
+      "admin"
+    ]
+  }
+},
+{
+  "model": "webapp.order",
+  "pk": 2,
+  "fields": {
+    "contact_phone": "4645",
+    "contact_name": "asd",
+    "delivery_address": "asd",
+    "status": "new",
+    "operator": [
+      "admin"
+    ],
+    "courier": [
+      "admin"
+    ]
+  }
+},
+{
+  "model": "webapp.employee",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "phone": "123456789"
+  }
+}
+]
